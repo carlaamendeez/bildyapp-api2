@@ -2,6 +2,8 @@ const express = require('express')
 const helmet = require('helmet')
 const { createServer } = require('http')
 const { Server } = require('socket.io')
+const swaggerUi = require('swagger-ui-express')
+const swaggerSpec = require('./config/swagger')
 const limiter = require('./middleware/rate-limit')
 const sanitize = require('./middleware/sanitize')
 const errorHandler = require('./middleware/error-handler')
@@ -31,6 +33,7 @@ app.get('/health', (req, res) => {
 })
 
 app.use('/api', routes)
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 app.use(errorHandler)
 
 io.on('connection', (socket) => {
