@@ -1,0 +1,56 @@
+POST http://localhost:3000/api/client
+Content-Type: application/json
+Authorization: Bearer TU_TOKEN
+
+{
+    "name": "Cliente Test",
+    "cif": "A12345678",
+    "email": "cliente@test.com",
+    "phone": "600000000"
+}
+
+###
+
+GET http://localhost:3000/api/client
+Authorization: Bearer TU_TOKEN
+
+###
+
+GET http://localhost:3000/api/client?page=1&limit=10&name=Cliente&sort=createdAt
+Authorization: Bearer TU_TOKEN
+
+###
+
+GET http://localhost:3000/api/client/ID_CLIENTE
+Authorization: Bearer TU_TOKEN
+
+###
+
+PUT http://localhost:3000/api/client/ID_CLIENTE
+Content-Type: application/json
+Authorization: Bearer TU_TOKEN
+
+{
+    "name": "Cliente Actualizado",
+    "phone": "611111111"
+}
+
+###
+
+DELETE http://localhost:3000/api/client/ID_CLIENTE?soft=true
+Authorization: Bearer TU_TOKEN
+
+###
+
+DELETE http://localhost:3000/api/client/ID_CLIENTE
+Authorization: Bearer TU_TOKEN
+
+###
+
+GET http://localhost:3000/api/client/archived
+Authorization: Bearer TU_TOKEN
+
+###
+
+PATCH http://localhost:3000/api/client/ID_CLIENTE/restore
+Authorization: Bearer TU_TOKEN

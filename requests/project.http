@@ -1,0 +1,57 @@
+POST http://localhost:3000/api/project
+Content-Type: application/json
+Authorization: Bearer TU_TOKEN
+
+{
+    "name": "Proyecto Test",
+    "projectCode": "PRJ001",
+    "client": "ID_CLIENTE",
+    "email": "proyecto@test.com",
+    "notes": "Notas del proyecto"
+}
+
+###
+
+GET http://localhost:3000/api/project
+Authorization: Bearer TU_TOKEN
+
+###
+
+GET http://localhost:3000/api/project?page=1&limit=10&name=Proyecto&sort=createdAt
+Authorization: Bearer TU_TOKEN
+
+###
+
+GET http://localhost:3000/api/project/ID_PROYECTO
+Authorization: Bearer TU_TOKEN
+
+###
+
+PUT http://localhost:3000/api/project/ID_PROYECTO
+Content-Type: application/json
+Authorization: Bearer TU_TOKEN
+
+{
+    "name": "Proyecto Actualizado",
+    "notes": "Notas actualizadas"
+}
+
+###
+
+DELETE http://localhost:3000/api/project/ID_PROYECTO?soft=true
+Authorization: Bearer TU_TOKEN
+
+###
+
+DELETE http://localhost:3000/api/project/ID_PROYECTO
+Authorization: Bearer TU_TOKEN
+
+###
+
+GET http://localhost:3000/api/project/archived
+Authorization: Bearer TU_TOKEN
+
+###
+
+PATCH http://localhost:3000/api/project/ID_PROYECTO/restore
+Authorization: Bearer TU_TOKEN

@@ -1,0 +1,69 @@
+POST http://localhost:3000/api/deliverynote
+Content-Type: application/json
+Authorization: Bearer TU_TOKEN
+
+{
+    "client": "ID_CLIENTE",
+    "project": "ID_PROYECTO",
+    "format": "hours",
+    "workDate": "2024-01-01",
+    "hours": 8,
+    "description": "Trabajo realizado"
+}
+
+###
+
+POST http://localhost:3000/api/deliverynote
+Content-Type: application/json
+Authorization: Bearer TU_TOKEN
+
+{
+    "client": "ID_CLIENTE",
+    "project": "ID_PROYECTO",
+    "format": "material",
+    "workDate": "2024-01-01",
+    "material": "Cemento",
+    "quantity": 10,
+    "unit": "sacos"
+}
+
+###
+
+GET http://localhost:3000/api/deliverynote
+Authorization: Bearer TU_TOKEN
+
+###
+
+GET http://localhost:3000/api/deliverynote?page=1&limit=10&sort=createdAt
+Authorization: Bearer TU_TOKEN
+
+###
+
+GET http://localhost:3000/api/deliverynote/ID_ALBARAN
+Authorization: Bearer TU_TOKEN
+
+###
+
+PUT http://localhost:3000/api/deliverynote/ID_ALBARAN
+Content-Type: application/json
+Authorization: Bearer TU_TOKEN
+
+{
+    "description": "Descripcion actualizada",
+    "hours": 10
+}
+
+###
+
+DELETE http://localhost:3000/api/deliverynote/ID_ALBARAN?soft=true
+Authorization: Bearer TU_TOKEN
+
+###
+
+DELETE http://localhost:3000/api/deliverynote/ID_ALBARAN
+Authorization: Bearer TU_TOKEN
+
+###
+
+GET http://localhost:3000/api/deliverynote/ID_ALBARAN/pdf
+Authorization: Bearer TU_TOKEN
