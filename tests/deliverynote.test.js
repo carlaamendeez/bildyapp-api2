@@ -1,5 +1,6 @@
 const request = require('supertest')
 const { app } = require('../src/app')
+const DeliveryNote = require('../src/models/DeliveryNote')
 
 let token
 let clientId
@@ -91,7 +92,7 @@ describe('DeliveryNote endpoints', () => {
         expect(res.body.data.length).toBeGreaterThan(0)
     })
 
-    it('no debe editar un albaran firmado', async () => {
+    it('debe devolver 409 al editar un albaran firmado', async () => {
         const create = await request(app)
             .post('/api/deliverynote')
             .set('Authorization', `Bearer ${token}`)
@@ -103,11 +104,30 @@ describe('DeliveryNote endpoints', () => {
                 hours: 8,
             })
         const noteId = create.body.data._id
-        await require('../src/models/DeliveryNote').findByIdAndUpdate(noteId, { signed: true })
+        await DeliveryNote.findByIdAndUpdate(noteId, { signed: true })
         const res = await request(app)
             .put(`/api/deliverynote/${noteId}`)
             .set('Authorization', `Bearer ${token}`)
             .send({ hours: 10 })
-        expect(res.statusCode).toBe(400)
+        expect(res.statusCode).toBe(409)
+    })
+
+    it('debe devolver 409 al eliminar un albaran firmado', async () => {
+        const create = await request(app)
+            .post('/api/deliverynote')
+            .set('Authorization', `Bearer ${token}`)
+            .send({
+                client: clientId,
+                project: projectId,
+                format: 'hours',
+                workDate: '2024-01-01',
+                hours: 8,
+            })
+        const noteId = create.body.data._id
+        await DeliveryNote.findByIdAndUpdate(noteId, { signed: true })
+        const res = await request(app)
+            .delete(`/api/deliverynote/${noteId}`)
+            .set('Authorization', `Bearer ${token}`)
+        expect(res.statusCode).toBe(409)
     })
 })
