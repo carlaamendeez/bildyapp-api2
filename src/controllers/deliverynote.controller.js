@@ -20,6 +20,10 @@ const createDeliveryNote = async (req, res, next) => {
             return next(new AppError('Proyecto no encontrado en tu compañía', 404))
         }
         const deliveryNote = await DeliveryNote.create({ ...req.body, user: user._id, company: user.company._id })
+
+        const io = req.app.get('io')
+        io.to(user.company._id.toString()).emit('deliverynote:new', deliveryNote)
+
         res.status(201).json({ status: 'success', data: deliveryNote })
     } catch (err) {
         next(err)
@@ -68,7 +72,7 @@ const updateDeliveryNote = async (req, res, next) => {
             return next(new AppError('Albarán no encontrado', 404))
         }
         if (deliveryNote.signed) {
-            return next(new AppError('No se puede editar un albarán firmado', 400))
+            return next(new AppError('No se puede editar un albarán firmado', 409))
         }
         const updated = await DeliveryNote.findByIdAndUpdate(req.params.id, req.body, { new: true })
         res.status(200).json({ status: 'success', data: updated })
@@ -84,7 +88,7 @@ const deleteDeliveryNote = async (req, res, next) => {
             return next(new AppError('Albarán no encontrado', 404))
         }
         if (deliveryNote.signed) {
-            return next(new AppError('No se puede eliminar un albarán firmado', 400))
+            return next(new AppError('No se puede eliminar un albarán firmado', 409))
         }
         const { soft } = req.query
         if (soft === 'true') {
@@ -105,7 +109,7 @@ const signDeliveryNote = async (req, res, next) => {
             return next(new AppError('Albarán no encontrado', 404))
         }
         if (deliveryNote.signed) {
-            return next(new AppError('El albarán ya está firmado', 400))
+            return next(new AppError('El albarán ya está firmado', 409))
         }
         if (!req.file) {
             return next(new AppError('No se ha subido ninguna firma', 400))
@@ -118,6 +122,10 @@ const signDeliveryNote = async (req, res, next) => {
             { signed: true, signedAt: new Date(), signatureUrl, pdfUrl },
             { new: true }
         )
+
+        const io = req.app.get('io')
+        io.to(req.user.company._id.toString()).emit('deliverynote:signed', updated)
+
         res.status(200).json({ status: 'success', data: updated })
     } catch (err) {
         next(err)

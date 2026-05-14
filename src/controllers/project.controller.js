@@ -17,6 +17,10 @@ const createProject = async (req, res, next) => {
             return next(new AppError('Ya existe un proyecto con ese código en tu compañía', 400))
         }
         const project = await Project.create({ ...req.body, user: user._id, company: user.company._id })
+
+        const io = req.app.get('io')
+        io.to(user.company._id.toString()).emit('project:new', project)
+
         res.status(201).json({ status: 'success', data: project })
     } catch (err) {
         next(err)

@@ -12,6 +12,10 @@ const createClient = async (req, res, next) => {
             return next(new AppError('Ya existe un cliente con ese CIF en tu compañía', 400))
         }
         const client = await Client.create({ ...req.body, user: user._id, company: user.company._id })
+
+        const io = req.app.get('io')
+        io.to(user.company._id.toString()).emit('client:new', client)
+
         res.status(201).json({ status: 'success', data: client })
     } catch (err) {
         next(err)
